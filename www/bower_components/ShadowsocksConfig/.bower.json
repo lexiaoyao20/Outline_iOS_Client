@@ -1,0 +1,19 @@
+{
+  "name": "shadowsocks-config",
+  "version": "0.0.8",
+  "license": "Apache-2.0",
+  "main": "shadowsocks_config.js",
+  "dependencies": {
+    "punycode": "^1.4.1"
+  },
+  "homepage": "https://github.com/Jigsaw-Code/outline-shadowsocksconfig",
+  "_release": "0.0.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.8",
+    "commit": "57845b8295f1b8ba117d1d69efb7643ebe08dd15"
+  },
+  "_source": "https://github.com/Jigsaw-Code/outline-shadowsocksconfig.git",
+  "_target": "^v0.0.8",
+  "_originalSource": "Jigsaw-Code/outline-shadowsocksconfig"
+}

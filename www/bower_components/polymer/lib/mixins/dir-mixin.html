@@ -1,0 +1,218 @@
+<!--
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><link rel="import" href="property-accessors.html">
+
+<script>'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+(function () {
+  'use strict';
+
+  var HOST_DIR = /:host\(:dir\((ltr|rtl)\)\)/g;
+  var HOST_DIR_REPLACMENT = ':host([dir="$1"])';
+
+  var EL_DIR = /([\s\w-#\.\[\]\*]*):dir\((ltr|rtl)\)/g;
+  var EL_DIR_REPLACMENT = ':host([dir="$2"]) $1';
+
+  /**
+   * @type {!Array<!Polymer_DirMixin>}
+   */
+  var DIR_INSTANCES = [];
+
+  /** @type {MutationObserver} */
+  var observer = null;
+
+  var DOCUMENT_DIR = '';
+
+  function getRTL() {
+    DOCUMENT_DIR = document.documentElement.getAttribute('dir');
+  }
+
+  /**
+   * @param {!Polymer_DirMixin} instance Instance to set RTL status on
+   */
+  function setRTL(instance) {
+    if (!instance.__autoDirOptOut) {
+      var el = /** @type {!HTMLElement} */instance;
+      el.setAttribute('dir', DOCUMENT_DIR);
+    }
+  }
+
+  function updateDirection() {
+    getRTL();
+    DOCUMENT_DIR = document.documentElement.getAttribute('dir');
+    for (var i = 0; i < DIR_INSTANCES.length; i++) {
+      setRTL(DIR_INSTANCES[i]);
+    }
+  }
+
+  function takeRecords() {
+    if (observer && observer.takeRecords().length) {
+      updateDirection();
+    }
+  }
+
+  /**
+   * Element class mixin that allows elements to use the `:dir` CSS Selector to have
+   * text direction specific styling.
+   *
+   * With this mixin, any stylesheet provided in the template will transform `:dir` into
+   * `:host([dir])` and sync direction with the page via the element's `dir` attribute.
+   *
+   * Elements can opt out of the global page text direction by setting the `dir` attribute
+   * directly in `ready()` or in HTML.
+   *
+   * Caveats:
+   * - Applications must set `<html dir="ltr">` or `<html dir="rtl">` to sync direction
+   * - Automatic left-to-right or right-to-left styling is sync'd with the `<html>` element only.
+   * - Changing `dir` at runtime is supported.
+   * - Opting out of the global direction styling is permanent
+   *
+   * @mixinFunction
+   * @polymer
+   * @appliesMixin Polymer.PropertyAccessors
+   * @memberof Polymer
+   */
+  Polymer.DirMixin = Polymer.dedupingMixin(function (base) {
+
+    if (!observer) {
+      getRTL();
+      observer = new MutationObserver(updateDirection);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
+    }
+
+    /**
+     * @constructor
+     * @extends {base}
+     * @implements {Polymer_PropertyAccessors}
+     * @private
+     */
+    var elementBase = Polymer.PropertyAccessors(base);
+
+    /**
+     * @polymer
+     * @mixinClass
+     * @implements {Polymer_DirMixin}
+     */
+
+    var Dir = function (_elementBase) {
+      _inherits(Dir, _elementBase);
+
+      _createClass(Dir, null, [{
+        key: '_processStyleText',
+
+
+        /**
+         * @override
+         * @suppress {missingProperties} Interfaces in closure do not inherit statics, but classes do
+         */
+        value: function _processStyleText(cssText, baseURI) {
+          cssText = _get(Dir.__proto__ || Object.getPrototypeOf(Dir), '_processStyleText', this).call(this, cssText, baseURI);
+          cssText = this._replaceDirInCssText(cssText);
+          return cssText;
+        }
+
+        /**
+         * Replace `:dir` in the given CSS text
+         *
+         * @param {string} text CSS text to replace DIR
+         * @return {string} Modified CSS
+         */
+
+      }, {
+        key: '_replaceDirInCssText',
+        value: function _replaceDirInCssText(text) {
+          var replacedText = text;
+          replacedText = replacedText.replace(HOST_DIR, HOST_DIR_REPLACMENT);
+          replacedText = replacedText.replace(EL_DIR, EL_DIR_REPLACMENT);
+          if (text !== replacedText) {
+            this.__activateDir = true;
+          }
+          return replacedText;
+        }
+      }]);
+
+      function Dir() {
+        _classCallCheck(this, Dir);
+
+        /** @type {boolean} */
+        var _this = _possibleConstructorReturn(this, (Dir.__proto__ || Object.getPrototypeOf(Dir)).call(this));
+
+        _this.__autoDirOptOut = false;
+        return _this;
+      }
+
+      /**
+       * @suppress {invalidCasts} Closure doesn't understand that `this` is an HTMLElement
+       * @return {void}
+       */
+
+
+      _createClass(Dir, [{
+        key: 'ready',
+        value: function ready() {
+          _get(Dir.prototype.__proto__ || Object.getPrototypeOf(Dir.prototype), 'ready', this).call(this);
+          this.__autoDirOptOut = /** @type {!HTMLElement} */this.hasAttribute('dir');
+        }
+
+        /**
+         * @suppress {missingProperties} If it exists on elementBase, it can be super'd
+         * @return {void}
+         */
+
+      }, {
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+          if (elementBase.prototype.connectedCallback) {
+            _get(Dir.prototype.__proto__ || Object.getPrototypeOf(Dir.prototype), 'connectedCallback', this).call(this);
+          }
+          if (this.constructor.__activateDir) {
+            takeRecords();
+            DIR_INSTANCES.push(this);
+            setRTL(this);
+          }
+        }
+
+        /**
+         * @suppress {missingProperties} If it exists on elementBase, it can be super'd
+         * @return {void}
+         */
+
+      }, {
+        key: 'disconnectedCallback',
+        value: function disconnectedCallback() {
+          if (elementBase.prototype.disconnectedCallback) {
+            _get(Dir.prototype.__proto__ || Object.getPrototypeOf(Dir.prototype), 'disconnectedCallback', this).call(this);
+          }
+          if (this.constructor.__activateDir) {
+            var idx = DIR_INSTANCES.indexOf(this);
+            if (idx > -1) {
+              DIR_INSTANCES.splice(idx, 1);
+            }
+          }
+        }
+      }]);
+
+      return Dir;
+    }(elementBase);
+
+    Dir.__activateDir = false;
+
+    return Dir;
+  });
+})();</script>

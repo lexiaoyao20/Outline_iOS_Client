@@ -1,0 +1,153 @@
+<!--
+@license
+Copyright (c) 2017 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><link rel="import" href="element-mixin.html">
+<script>'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+(function () {
+  'use strict';
+
+  var DISABLED_ATTR = 'disable-upgrade';
+
+  /**
+   * Element class mixin that allows the element to boot up in a non-enabled
+   * state when the `disable-upgrade` attribute is present. This mixin is
+   * designed to be used with element classes like Polymer.Element that perform
+   * initial startup work when they are first connected. When the
+   * `disable-upgrade` attribute is removed, if the element is connected, it
+   * boots up and "enables" as it otherwise would; if it is not connected, the
+   * element boots up when it is next connected.
+   *
+   * Using `disable-upgrade` with Polymer.Element prevents any data propagation
+   * to the element, any element DOM from stamping, or any work done in
+   * connected/disconnctedCallback from occuring, but it does not prevent work
+   * done in the element constructor.
+   *
+   * Note, this mixin must be applied on top of any element class that
+   * itself implements a `connectedCallback` so that it can control the work
+   * done in `connectedCallback`. For example,
+   *
+   *     MyClass = Polymer.DisableUpgradeMixin(class extends BaseClass {...});
+   *
+   * @mixinFunction
+   * @polymer
+   * @appliesMixin Polymer.ElementMixin
+   * @memberof Polymer
+   */
+  Polymer.DisableUpgradeMixin = Polymer.dedupingMixin(function (base) {
+
+    /**
+     * @constructor
+     * @extends {base}
+     * @implements {Polymer_ElementMixin}
+     * @private
+     */
+    var superClass = Polymer.ElementMixin(base);
+
+    /**
+     * @polymer
+     * @mixinClass
+     * @implements {Polymer_DisableUpgradeMixin}
+     */
+
+    var DisableUpgradeClass = function (_superClass) {
+      _inherits(DisableUpgradeClass, _superClass);
+
+      function DisableUpgradeClass() {
+        _classCallCheck(this, DisableUpgradeClass);
+
+        return _possibleConstructorReturn(this, (DisableUpgradeClass.__proto__ || Object.getPrototypeOf(DisableUpgradeClass)).apply(this, arguments));
+      }
+
+      _createClass(DisableUpgradeClass, [{
+        key: 'attributeChangedCallback',
+
+
+        /** @override */
+        value: function attributeChangedCallback(name, old, value, namespace) {
+          if (name == DISABLED_ATTR) {
+            if (!this.__dataEnabled && value == null && this.isConnected) {
+              _get(DisableUpgradeClass.prototype.__proto__ || Object.getPrototypeOf(DisableUpgradeClass.prototype), 'connectedCallback', this).call(this);
+            }
+          } else {
+            _get(DisableUpgradeClass.prototype.__proto__ || Object.getPrototypeOf(DisableUpgradeClass.prototype), 'attributeChangedCallback', this).call(this, name, old, value, namespace);
+          }
+        }
+
+        /*
+          NOTE: cannot gate on attribute because this is called before
+          attributes are delivered. Therefore, we stub this out and
+          call `super._initializeProperties()` manually.
+        */
+        /** @override */
+
+      }, {
+        key: '_initializeProperties',
+        value: function _initializeProperties() {}
+
+        // prevent user code in connected from running
+        /** @override */
+
+      }, {
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+          if (this.__dataEnabled || !this.hasAttribute(DISABLED_ATTR)) {
+            _get(DisableUpgradeClass.prototype.__proto__ || Object.getPrototypeOf(DisableUpgradeClass.prototype), 'connectedCallback', this).call(this);
+          }
+        }
+
+        // prevent element from turning on properties
+        /** @override */
+
+      }, {
+        key: '_enableProperties',
+        value: function _enableProperties() {
+          if (!this.hasAttribute(DISABLED_ATTR)) {
+            if (!this.__dataEnabled) {
+              _get(DisableUpgradeClass.prototype.__proto__ || Object.getPrototypeOf(DisableUpgradeClass.prototype), '_initializeProperties', this).call(this);
+            }
+            _get(DisableUpgradeClass.prototype.__proto__ || Object.getPrototypeOf(DisableUpgradeClass.prototype), '_enableProperties', this).call(this);
+          }
+        }
+
+        // only go if "enabled"
+        /** @override */
+
+      }, {
+        key: 'disconnectedCallback',
+        value: function disconnectedCallback() {
+          if (this.__dataEnabled) {
+            _get(DisableUpgradeClass.prototype.__proto__ || Object.getPrototypeOf(DisableUpgradeClass.prototype), 'disconnectedCallback', this).call(this);
+          }
+        }
+      }], [{
+        key: 'observedAttributes',
+
+
+        /** @override */
+        get: function get() {
+          return _get(DisableUpgradeClass.__proto__ || Object.getPrototypeOf(DisableUpgradeClass), 'observedAttributes', this).concat(DISABLED_ATTR);
+        }
+      }]);
+
+      return DisableUpgradeClass;
+    }(superClass);
+
+    return DisableUpgradeClass;
+  });
+})();</script>

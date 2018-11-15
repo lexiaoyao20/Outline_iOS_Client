@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget android-versionCode="18" id="org.outline.android.client" version="1.2.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="LocalStorage">
+        <param name="ios-package" value="CDVLocalStorage" />
+    </feature>
+    <feature name="Console">
+        <param name="ios-package" value="CDVLogger" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="HandleOpenUrl">
+        <param name="ios-package" value="CDVHandleOpenURL" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="IntentAndNavigationFilter">
+        <param name="ios-package" value="CDVIntentAndNavigationFilter" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="GestureHandler">
+        <param name="ios-package" value="CDVGestureHandler" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="OutlinePlugin">
+        <param name="ios-package" value="OutlinePlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Clipboard">
+        <param name="ios-package" value="CDVClipboard" />
+    </feature>
+    <name>Outline</name>
+    <description>
+        Internet without borders (powered by Shadowsocks)
+    </description>
+    <content src="cordova_index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <sentry>
+        <dev dsn="https://319145c481df41458bb6e84c1a99c9ff@sentry.io/159503" />
+        <release dsn="https://6a1e6e7371a64db59f5ba6c34a77d78c@sentry.io/159502" />
+        <dev-native dsn="https://319145c481df41458bb6e84c1a99c9ff:73cc3261d25e44ac90221e7d9ad30b24@sentry.io/159503" />
+        <release-native dsn="https://6a1e6e7371a64db59f5ba6c34a77d78c:568f6c78f9f94f91afba4aba05756001@sentry.io/159502" />
+    </sentry>
+    <splash src="resources/splashscreen/ios/splashscreen@2x~universal~anyany.png" />
+    <icon height="57" src="resources/icons/ios/Icon-57@1x.png" width="57" />
+    <icon height="114" src="resources/icons/ios/Icon-57@2x.png" width="114" />
+    <icon height="120" src="resources/icons/ios/Icon-60@2x.png" width="120" />
+    <icon height="180" src="resources/icons/ios/Icon-60@3x.png" width="180" />
+    <icon height="167" src="resources/icons/ios/Icon-83.5@2x.png" width="167" />
+    <icon height="72" src="resources/icons/ios/Icon-72@1x.png" width="72" />
+    <icon height="144" src="resources/icons/ios/Icon-72@2x.png" width="144" />
+    <icon height="76" src="resources/icons/ios/Icon-76@1x.png" width="76" />
+    <icon height="152" src="resources/icons/ios/Icon-76@2x.png" width="152" />
+    <icon height="1024" src="resources/icons/ios/Icon-512@2x.png" width="1024" />
+    <icon height="80" src="resources/icons/ios/Icon-40@2x.png" width="80" />
+    <icon height="120" src="resources/icons/ios/Icon-40@3x.png" width="120" />
+    <icon height="50" src="resources/icons/ios/Icon-50@1x.png" width="50" />
+    <icon height="100" src="resources/icons/ios/Icon-50@2x.png" width="100" />
+    <icon height="29" src="resources/icons/ios/Icon-29@1x.png" width="29" />
+    <icon height="58" src="resources/icons/ios/Icon-29@2x.png" width="58" />
+    <icon height="87" src="resources/icons/ios/Icon-29@3x.png" width="87" />
+    <icon height="40" src="resources/icons/ios/Icon-20@2x.png" width="40" />
+    <icon height="60" src="resources/icons/ios/Icon-20@3x.png" width="60" />
+    <preference name="AllowInlineMediaPlayback" value="false" />
+    <preference name="BackupWebStorage" value="cloud" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="EnableViewportScale" value="false" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
+    <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="SuppressesLongPressGesture" value="false" />
+    <preference name="Suppresses3DTouchGesture" value="false" />
+    <preference name="GapBetweenPages" value="0" />
+    <preference name="PageLength" value="0" />
+    <preference name="PaginationBreakingMode" value="page" />
+    <preference name="PaginationMode" value="unpaginated" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="android-minSdkVersion" value="21" />
+    <preference name="android-targetSdkVersion" value="26" />
+    <preference name="AndroidLaunchMode" value="singleInstance" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="deployment-target" value="9.0" />
+    <preference name="StatusBarBackgroundColor" value="#263238" />
+    <preference name="StatusBarStyle" value="lightcontent" />
+</widget>

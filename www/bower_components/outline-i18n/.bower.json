@@ -1,0 +1,14 @@
+{
+  "name": "outline-i18n",
+  "homepage": "https://github.com/Jigsaw-Code/outline-i18n",
+  "version": "0.0.7",
+  "_release": "0.0.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.7",
+    "commit": "4642c3657074246b8eca09486941434718f66608"
+  },
+  "_source": "https://github.com/Jigsaw-Code/outline-i18n.git",
+  "_target": "^0.0.7",
+  "_originalSource": "Jigsaw-Code/outline-i18n"
+}
