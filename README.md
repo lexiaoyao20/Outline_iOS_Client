@@ -13,3 +13,8 @@
 ## 如何使用
 
 参考下面的链接生成 Access-Key：[生成 OUTLINE客户端兼容 accesskey](http://howboring.us/index.php/archives/outline-accesskey-compatiblie-all-server.html)
+
+还有一种更简单的方式，直接用 [ShadowsocksX-NG](https://github.com/shadowsocks/ShadowsocksX-NG) 获取 Access-Key。
+点击ShadowsocksX-NG菜单，分享服务器配置 -> 复制链接，即可。
+
+
